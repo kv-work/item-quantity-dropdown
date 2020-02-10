@@ -10,6 +10,7 @@ import 'styles/main.scss';
     minItems: 0,
     selectionText: 'item',
     textPlural: 'items',
+    moreThenFiveText: 'items',
     controls: {
       position: 'right',
       displayCls: 'iqdropdown-content',
