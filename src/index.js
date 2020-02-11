@@ -3,7 +3,7 @@
 // plugin styles
 import 'styles/main.scss';
 
-/* eslint-disable func-names */
+/* eslint-disable */
 (function ($) {
   const defaults = {
     maxItems: Infinity,
@@ -17,13 +17,14 @@ import 'styles/main.scss';
       controlsCls: 'iqdropdown-item-controls',
       counterCls: 'counter',
       controlBtnsCls: "iqdropdown-menu-control-buttons",
-      clearBtn: false,
+      clearBtn: true,
       clearBtnLabel: "Clear",
-      applyBtn: false,
+      applyBtn: true,
       applyBtnLabel: "Apply"
     },
     items: {},
-    setCustomMessage: (itemCount, totalItems) => {
+    setCustomMessage(itemCount, totalItems) {
+      
       if (totalItems == 0) {
         return this.initialText
       }
@@ -55,8 +56,8 @@ import 'styles/main.scss';
       const itemCount = {};
       let totalItems = 0;
 
-      function updateDisplay () {
-        return settings.setCustomMessage(itemCount, totalItems)
+      const updateDisplay = () => {
+        $selection.html(settings.setCustomMessage(itemCount, totalItems)) 
       }
 
       function setItemSettings (id, $item) {
@@ -137,24 +138,33 @@ import 'styles/main.scss';
           $controlsBtn.append($clearBtn)
 
           $clearBtn.click( (event) => {
-            itemCount = {};
-            updateDisplay();
-            onChange(id, itemCount[id], totalItems);
-
-            event.preventDefault();
+            const {onChange} = settings;
+            console.log("clear")
+            
+            console.log(itemCount)
+            for (let key in itemCount) {
+              console.log(key)
+              totalItems -= itemCount[key];              
+              itemCount[key] = 0;
+              updateDisplay();
+              onChange(key, itemCount[key], 0);
+            }
+            
+            event.stopPropagation()
           })
         }
 
         if (settings.controls.applyBtn) {
-          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtn}</button>`)
+          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtnLabel}</button>`)
           $controlsBtn.append($applyBtn)
 
           $applyBtn.click( (event) => {
+            const {onChange} = settings;
             updateDisplay();
-            onChange(id, itemCount[id], totalItems);
             $this.toggleClass('menu-open');
 
-            event.preventDefault()
+            
+            event.stopPropagation()
           } )
         }
 
@@ -175,9 +185,9 @@ import 'styles/main.scss';
         totalItems += defaultCount;
         setItemSettings(id, $item);
         addControls(id, $item);
-        addControlBtns();
+        
       });
-
+      addControlBtns();
       updateDisplay();
     });
 
