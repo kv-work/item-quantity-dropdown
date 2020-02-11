@@ -1,3 +1,5 @@
+/* eslint-disable*/
+
 /* global jQuery */
 
 // plugin styles
@@ -20,24 +22,24 @@ import 'styles/main.scss';
       clearBtn: false,
       clearBtnLabel: "Clear",
       applyBtn: false,
-      applyBtnLabel: "Apply"
+      applyBtnLabel: "Apply",
     },
     items: {},
     setCustomMessage: (itemCount, totalItems) => {
       if (totalItems == 0) {
-        return this.initialText
+        return this.initialText;
       }
 
       if (totalItems == 1) {
-        return `1 ${this.selectionText}`
+        return `1 ${this.selectionText}`;
       }
 
       if (totalItems < 5) {
-        return `${totalItems} ${this.textPlural}`
+        return `${totalItems} ${this.textPlural}`;
       }
 
       if (totalItems >= 5) {
-        return `${totalItems} ${this.moreThenFiveText}`
+        return `${totalItems} ${this.moreThenFiveText}`;
       }
     },
     onChange: () => {},
@@ -56,7 +58,7 @@ import 'styles/main.scss';
       let totalItems = 0;
 
       function updateDisplay () {
-        return settings.setCustomMessage(itemCount, totalItems)
+        return settings.setCustomMessage(itemCount, totalItems);
       }
 
       function setItemSettings (id, $item) {
@@ -127,7 +129,7 @@ import 'styles/main.scss';
         return $item;
       }
 
-      function addControlBtns () {
+      function addControlBtns (id) {
         const $controlsBtn = $('<div />').addClass(settings.controls.controlBtnsCls);
 
         let $clearBtn, $applyBtn;
@@ -137,7 +139,11 @@ import 'styles/main.scss';
           $controlsBtn.append($clearBtn)
 
           $clearBtn.click( (event) => {
-            itemCount = {};
+            
+            for (let i = 0; i < itemCount.length; i++) {
+              itemCount[i] = '';
+            }
+            
             updateDisplay();
             onChange(id, itemCount[id], totalItems);
 

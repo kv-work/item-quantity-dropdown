@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -5,11 +7,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const autoprefixerPlugin = require('autoprefixer');
 
-const devMode = process.env.NODE_ENV === 'development';
+const devMode = process.env.mode === 'development';
 const pluginName = 'item-quantity-dropdown';
 
 const config = {
-  mode: process.env.NODE_ENV,
+  mode: process.env.mode,
 
   entry: './src/index.js',
 
