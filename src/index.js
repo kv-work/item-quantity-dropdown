@@ -16,8 +16,30 @@ import 'styles/main.scss';
       displayCls: 'iqdropdown-content',
       controlsCls: 'iqdropdown-item-controls',
       counterCls: 'counter',
+      controlBtnsCls: "iqdropdown-menu-control-buttons",
+      clearBtn: false,
+      clearBtnLabel: "Clear",
+      applyBtn: false,
+      applyBtnLabel: "Apply"
     },
     items: {},
+    setCustomMessage: (itemCount, totalItems) => {
+      if (totalItems == 0) {
+        return this.initialText
+      }
+
+      if (totalItems == 1) {
+        return `1 ${this.selectionText}`
+      }
+
+      if (totalItems < 5) {
+        return `${totalItems} ${this.textPlural}`
+      }
+
+      if (totalItems >= 5) {
+        return `${totalItems} ${this.moreThenFiveText}`
+      }
+    },
     onChange: () => {},
     beforeDecrement: () => true,
     beforeIncrement: () => true,
@@ -34,9 +56,7 @@ import 'styles/main.scss';
       let totalItems = 0;
 
       function updateDisplay () {
-        const usePlural = totalItems !== 1 && settings.textPlural.length > 0;
-        const text = usePlural ? settings.textPlural : settings.selectionText;
-        $selection.html(`${totalItems} ${text}`);
+        return settings.setCustomMessage(itemCount, totalItems)
       }
 
       function setItemSettings (id, $item) {
@@ -107,6 +127,41 @@ import 'styles/main.scss';
         return $item;
       }
 
+      function addControlBtns () {
+        const $controlsBtn = $('<div />').addClass(settings.controls.controlBtnsCls);
+
+        let $clearBtn, $applyBtn;
+
+        if (settings.controls.clearBtn) {
+          $clearBtn = $(`<button class="button-clear">${settings.controls.clearBtnLabel}</button>`)
+          $controlsBtn.append($clearBtn)
+
+          $clearBtn.click( (event) => {
+            itemCount = {};
+            updateDisplay();
+            onChange(id, itemCount[id], totalItems);
+
+            event.preventDefault();
+          })
+        }
+
+        if (settings.controls.applyBtn) {
+          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtn}</button>`)
+          $controlsBtn.append($applyBtn)
+
+          $applyBtn.click( (event) => {
+            updateDisplay();
+            onChange(id, itemCount[id], totalItems);
+            $this.toggleClass('menu-open');
+
+            event.preventDefault()
+          } )
+        }
+
+        $menu.append($controlsBtn);
+        
+      }
+
       $this.click(() => {
         $this.toggleClass('menu-open');
       });
@@ -120,6 +175,7 @@ import 'styles/main.scss';
         totalItems += defaultCount;
         setItemSettings(id, $item);
         addControls(id, $item);
+        addControlBtns();
       });
 
       updateDisplay();
