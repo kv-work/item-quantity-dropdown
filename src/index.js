@@ -9,6 +9,7 @@ import 'styles/main.scss';
   const defaults = {
     maxItems: Infinity,
     minItems: 0,
+    initialText: 'select item',
     selectionText: 'item',
     textPlural: 'items',
     moreThenFiveText: 'items',
@@ -64,8 +65,21 @@ import 'styles/main.scss';
       let totalItems = 0;
 
       const updateDisplay = () => {
+        // console.log('update');
         $selection.html(settings.setCustomMessage(itemCount, totalItems));
       };
+
+      function addClearEvent () {
+        $menu.trigger('clear');
+      }
+
+      function addClearEventHandler () {
+        $menu.bind('clear', (event) => {
+          const target = event.currentTarget;
+
+          $(target).find('.counter').html('0');
+        });
+      }
 
       function setItemSettings (id, $item) {
         const minCount = Number($item.data('mincount'));
@@ -156,22 +170,22 @@ import 'styles/main.scss';
           $controlsBtn.append($clearBtn);
 
           $clearBtn.click((event) => {
-            const {
-              onChange,
-              controls,
-            } = settings;
+            const { onChange } = settings;
 
             for (const key in itemCount) {
               if ({}.hasOwnProperty.call(itemCount, key)) {
                 totalItems -= itemCount[key];
                 itemCount[key] = 0;
-                $(controls.counterCls)[key].html(itemCount[key]);
                 onChange(key, itemCount[key], totalItems);
+
                 if (totalItems === 0) {
                   updateDisplay();
                 }
               }
             }
+
+            const clearEvent = new CustomEvent('clear', { bubbles: true });
+            event.target.dispatchEvent(clearEvent);
 
             event.stopPropagation();
           });
@@ -208,6 +222,8 @@ import 'styles/main.scss';
         setItemSettings(id, $item);
         addControls(id, $item);
       });
+      addClearEvent();
+      addClearEventHandler();
       addControlBtns();
       updateDisplay();
     });
