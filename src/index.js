@@ -45,8 +45,8 @@ import 'styles/main.scss';
     },
     onChange: () => {},
     beforeDecrement: (id, itemCount) => {
-      console.log(itemCount[id]);
-      return true;
+      if (itemCount[id] > 0) return true;
+      return false;
     },
     beforeIncrement: () => true,
     onApply: (itemCount, totalItems) => {
@@ -81,6 +81,25 @@ import 'styles/main.scss';
           clearBtnVisible = true;
           $clearBtn.removeClass('button-invisible');
         }
+
+        $items.each(function () {
+          const $item = $(this);
+          const id = $item.data('id');
+          const $decrementButton = $item.find('.button-decrement');
+          const $incrementButton = $item.find('.button-increment');
+
+          if (itemCount[id] <= settings.items[id].minCount) {
+            $decrementButton.addClass('button-decrement-disabled');
+          } else {
+            $decrementButton.removeClass('button-decrement-disabled');
+          }
+
+          if (itemCount[id] >= settings.items[id].maxCount) {
+            $incrementButton.addClass('button-increment-disabled');
+          } else {
+            $incrementButton.removeClass('button-increment-disabled');
+          }
+        });
       };
 
       function addClearEvent () {

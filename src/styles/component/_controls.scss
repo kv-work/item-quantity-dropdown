@@ -24,11 +24,19 @@
     &.button-decrement {
       border-bottom-left-radius: $iqdropdown-radius;
       border-top-left-radius: $iqdropdown-radius;
+
+      &-disabled {
+        opacity: 0.25;
+      }
     }
 
     &.button-increment {
       border-bottom-right-radius: $iqdropdown-radius;
       border-top-right-radius: $iqdropdown-radius;
+
+      &-disabled {
+        opacity: 0.25;
+      }
     }
   }
 }
