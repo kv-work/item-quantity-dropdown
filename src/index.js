@@ -263,6 +263,7 @@ import 'styles/main.scss';
       updateDisplay();
     });
 
+
     return this;
   };
 }(jQuery));
