@@ -65,7 +65,6 @@ import 'styles/main.scss';
       let totalItems = 0;
 
       const updateDisplay = () => {
-        // console.log('update');
         $selection.html(settings.setCustomMessage(itemCount, totalItems));
       };
 
