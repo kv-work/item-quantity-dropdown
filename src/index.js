@@ -1,9 +1,10 @@
+/* eslint-disable no-restricted-syntax */
 /* global jQuery */
 
 // plugin styles
 import 'styles/main.scss';
 
-/* eslint-disable */
+/* eslint-disable func-names */
 (function ($) {
   const defaults = {
     maxItems: Infinity,
@@ -16,34 +17,40 @@ import 'styles/main.scss';
       displayCls: 'iqdropdown-content',
       controlsCls: 'iqdropdown-item-controls',
       counterCls: 'counter',
-      controlBtnsCls: "iqdropdown-menu-control-buttons",
+      controlBtnsCls: 'iqdropdown-menu-control-buttons',
       clearBtn: true,
-      clearBtnLabel: "Clear",
+      clearBtnLabel: 'Clear',
       applyBtn: true,
-      applyBtnLabel: "Apply"
+      applyBtnLabel: 'Apply',
     },
     items: {},
-    setCustomMessage(itemCount, totalItems) {
-      
-      if (totalItems == 0) {
-        return this.initialText
+    setCustomMessage (itemCount, totalItems) {
+      if (totalItems === 0) {
+        return this.initialText;
       }
 
-      if (totalItems == 1) {
-        return `1 ${this.selectionText}`
+      if (totalItems === 1) {
+        return `1 ${this.selectionText}`;
       }
 
       if (totalItems < 5) {
-        return `${totalItems} ${this.textPlural}`
+        return `${totalItems} ${this.textPlural}`;
       }
 
       if (totalItems >= 5) {
-        return `${totalItems} ${this.moreThenFiveText}`
+        return `${totalItems} ${this.moreThenFiveText}`;
       }
+      return this.initialText;
     },
     onChange: () => {},
     beforeDecrement: () => true,
     beforeIncrement: () => true,
+    onApply: (itemCount, totalItems) => {
+      console.log('==================');
+      console.log(`Total Items: ${totalItems} including:`);
+      console.log(itemCount);
+      console.log('==================');
+    },
   };
 
   $.fn.iqDropdown = function (options) {
@@ -57,8 +64,8 @@ import 'styles/main.scss';
       let totalItems = 0;
 
       const updateDisplay = () => {
-        $selection.html(settings.setCustomMessage(itemCount, totalItems)) 
-      }
+        $selection.html(settings.setCustomMessage(itemCount, totalItems));
+      };
 
       function setItemSettings (id, $item) {
         const minCount = Number($item.data('mincount'));
@@ -94,7 +101,12 @@ import 'styles/main.scss';
         }
 
         $decrementButton.click((event) => {
-          const { items, minItems, beforeDecrement, onChange } = settings;
+          const {
+            items,
+            minItems,
+            beforeDecrement,
+            onChange,
+          } = settings;
           const allowClick = beforeDecrement(id, itemCount);
 
           if (allowClick && totalItems > minItems && itemCount[id] > items[id].minCount) {
@@ -109,7 +121,12 @@ import 'styles/main.scss';
         });
 
         $incrementButton.click((event) => {
-          const { items, maxItems, beforeIncrement, onChange } = settings;
+          const {
+            items,
+            maxItems,
+            beforeIncrement,
+            onChange,
+          } = settings;
           const allowClick = beforeIncrement(id, itemCount);
 
           if (allowClick && totalItems < maxItems && itemCount[id] < items[id].maxCount) {
@@ -131,45 +148,50 @@ import 'styles/main.scss';
       function addControlBtns () {
         const $controlsBtn = $('<div />').addClass(settings.controls.controlBtnsCls);
 
-        let $clearBtn, $applyBtn;
+        let $clearBtn;
+        let $applyBtn;
 
         if (settings.controls.clearBtn) {
-          $clearBtn = $(`<button class="button-clear">${settings.controls.clearBtnLabel}</button>`)
-          $controlsBtn.append($clearBtn)
+          $clearBtn = $(`<button class="button-clear">${settings.controls.clearBtnLabel}</button>`);
+          $controlsBtn.append($clearBtn);
 
-          $clearBtn.click( (event) => {
-            const {onChange} = settings;
-            console.log("clear")
-            
-            console.log(itemCount)
-            for (let key in itemCount) {
-              console.log(key)
-              totalItems -= itemCount[key];              
-              itemCount[key] = 0;
-              updateDisplay();
-              onChange(key, itemCount[key], 0);
+          $clearBtn.click((event) => {
+            const {
+              onChange,
+              controls,
+            } = settings;
+
+            for (const key in itemCount) {
+              if ({}.hasOwnProperty.call(itemCount, key)) {
+                totalItems -= itemCount[key];
+                itemCount[key] = 0;
+                $(controls.counterCls)[key].html(itemCount[key]);
+                onChange(key, itemCount[key], totalItems);
+                if (totalItems === 0) {
+                  updateDisplay();
+                }
+              }
             }
-            
-            event.stopPropagation()
-          })
+
+            event.stopPropagation();
+          });
         }
 
         if (settings.controls.applyBtn) {
-          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtnLabel}</button>`)
-          $controlsBtn.append($applyBtn)
+          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtnLabel}</button>`);
+          $controlsBtn.append($applyBtn);
 
-          $applyBtn.click( (event) => {
-            const {onChange} = settings;
-            updateDisplay();
+          $applyBtn.click((event) => {
+            const { onApply } = settings;
+
+            onApply(itemCount, totalItems);
             $this.toggleClass('menu-open');
 
-            
-            event.stopPropagation()
-          } )
+            event.stopPropagation();
+          });
         }
 
         $menu.append($controlsBtn);
-        
       }
 
       $this.click(() => {
@@ -185,7 +207,6 @@ import 'styles/main.scss';
         totalItems += defaultCount;
         setItemSettings(id, $item);
         addControls(id, $item);
-        
       });
       addControlBtns();
       updateDisplay();
