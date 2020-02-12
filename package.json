@@ -5,7 +5,9 @@
   "main": "lib/item-quantity-dropdown.js",
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --inline --progress --colors",
+    "start:win": "webpack-dev-server --inline --progress --colors --env.mode=development",
     "build": "NODE_ENV=production webpack -p --progress --colors",
+    "build:win": "webpack -p --progress --colors --env.mode=production",
     "lint": "yarn eslint && yarn stylelint",
     "lint:fix": "yarn eslint --fix && yarn stylelint --fix",
     "eslint": "eslint src webpack.config.js",
