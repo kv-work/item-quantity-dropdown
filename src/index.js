@@ -44,7 +44,10 @@ import 'styles/main.scss';
       return this.initialText;
     },
     onChange: () => {},
-    beforeDecrement: () => true,
+    beforeDecrement: (id, itemCount) => {
+      console.log(itemCount[id]);
+      return true;
+    },
     beforeIncrement: () => true,
     onApply: (itemCount, totalItems) => {
       console.log('==================');
@@ -63,9 +66,21 @@ import 'styles/main.scss';
       const settings = $.extend(true, {}, defaults, options);
       const itemCount = {};
       let totalItems = 0;
+      let clearBtnVisible = settings.controls.clearBtn;
 
       const updateDisplay = () => {
         $selection.html(settings.setCustomMessage(itemCount, totalItems));
+        const $clearBtn = $this.find('button.button-clear');
+
+        if (totalItems === 0 && $clearBtn && clearBtnVisible) {
+          clearBtnVisible = false;
+          $clearBtn.addClass('button-invisible');
+        }
+
+        if (totalItems !== 0 && $clearBtn && !clearBtnVisible) {
+          clearBtnVisible = true;
+          $clearBtn.removeClass('button-invisible');
+        }
       };
 
       function addClearEvent () {
@@ -97,6 +112,7 @@ import 'styles/main.scss';
             <i class="icon-decrement"></i>
           </button>
         `);
+
         const $incrementButton = $(`
           <button class="button-increment">
             <i class="icon-decrement icon-increment"></i>
@@ -166,6 +182,7 @@ import 'styles/main.scss';
 
         if (settings.controls.clearBtn) {
           $clearBtn = $(`<button class="button-clear">${settings.controls.clearBtnLabel}</button>`);
+          if (totalItems === 0) $clearBtn.addClass('button-invisible');
           $controlsBtn.append($clearBtn);
 
           $clearBtn.click((event) => {

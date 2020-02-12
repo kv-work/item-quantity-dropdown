@@ -10,4 +10,8 @@
     padding: 4px 8px;
     border-radius: 4px;
   }
+
+  & .button-invisible {
+    visibility: hidden;
+  }
 }
