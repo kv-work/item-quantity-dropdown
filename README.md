@@ -102,22 +102,37 @@ $(document).ready(() => {
   // min total items
   minItems: 0,
   // text to show on the dropdown
+  initialText: 'select item',
+  // text to show for one item
   selectionText: 'item',
   // text to show for multiple items
   textPlural: 'items',
+  // text to show for multiple (more then five) items if it's necessary
+  moreThenFiveText: 'items',
   // buttons to increment/decrement
   controls: {
     position: 'right',
-    displayCls: 'iqdropdown-item-display',
+    displayCls: 'iqdropdown-content',
     controlsCls: 'iqdropdown-item-controls',
-    counterCls: 'counter'
+    counterCls: 'counter',
+    // buttons to clear/apply
+    controlBtnsCls: 'iqdropdown-menu-control-buttons',
+    clearBtn: true,
+    clearBtnLabel: 'Clear',
+    applyBtn: true,
+    applyBtnLabel: 'Apply',
   },
+  items: {},
+  //func to generate text to show on the dropdown
+  setCustomMessage (itemCount, totalItems) {},
   // fires when an item quantity changes
-  onChange: (id, count, totalItems) => {},
+  onChange: () => {},
   // return false to prevent an item decrement
   beforeDecrement: (id, itemCount) => {},
   // return false to prevent an item increment
-  beforeIncrement: (id, itemCount) => {}
+  beforeIncrement: (id, itemCount) => {},
+  // fires when an items quantity applies
+  onApply: (itemCount, totalItems) => {}
 }
 ```
 
