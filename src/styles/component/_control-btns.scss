@@ -1,0 +1,13 @@
+.iqdropdown-menu-control-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  & button {
+    font-family: OpenSans, sans-serif;
+    font-size: 17px;
+    border: 1px solid;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+}
