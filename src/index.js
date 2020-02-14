@@ -65,11 +65,12 @@ import 'styles/main.scss';
       const $items = $menu.find('div.iqdropdown-menu-option');
       const settings = $.extend(true, {}, defaults, options);
       const itemCount = {};
+      const itemLabels = {};
       let totalItems = 0;
       let clearBtnVisible = settings.controls.clearBtn;
 
       const updateDisplay = () => {
-        $selection.html(settings.setCustomMessage(itemCount, totalItems));
+        $selection.html(settings.setCustomMessage(itemCount, totalItems, itemLabels));
         const $clearBtn = $this.find('button.button-clear');
 
         if (totalItems === 0 && $clearBtn && clearBtnVisible) {
@@ -194,7 +195,12 @@ import 'styles/main.scss';
       }
 
       function addControlBtns () {
-        const $controlsBtn = $('<div />').addClass(settings.controls.controlBtnsCls);
+        let $controlsBtn;
+
+        if (settings.controls.clearBtn || settings.controls.applyBtn) {
+          $controlsBtn = $('<div />').addClass(settings.controls.controlBtnsCls);
+        }
+
 
         let $clearBtn;
         let $applyBtn;
@@ -250,9 +256,11 @@ import 'styles/main.scss';
       $items.each(function () {
         const $item = $(this);
         const id = $item.data('id');
+        const label = $item.find('.iqdropdown-item')[0].innerText;
         const defaultCount = Number($item.data('defaultcount') || '0');
 
         itemCount[id] = defaultCount;
+        itemLabels[id] = label;
         totalItems += defaultCount;
         setItemSettings(id, $item);
         addControls(id, $item);

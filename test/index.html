@@ -136,6 +136,20 @@
           clearBtnLabel: 'Очистить',
           applyBtn: true,
           applyBtnLabel: 'Применить',
+        },
+
+        setCustomMessage (itemCount, totalItems, itemLabels) {          
+          let selectionText = '';
+          let i = 0;
+
+          if (totalItems == 0) return initialText;
+          for (let key in itemCount) {
+            if (itemCount[key] > 0) {              
+              selectionText += itemCount[key] + " " + itemLabels[key] + ", ";
+            }            
+          }
+
+          return selectionText;
         }
 
       });
