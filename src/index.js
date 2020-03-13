@@ -71,6 +71,10 @@ import 'styles/main.scss';
 
       const updateDisplay = () => {
         $selection.html(settings.setCustomMessage(itemCount, totalItems, itemLabels));
+        $this.data({
+          items: itemCount,
+          total: totalItems,
+        });
         const $clearBtn = $this.find('button.button-clear');
 
         if (totalItems === 0 && $clearBtn && clearBtnVisible) {
