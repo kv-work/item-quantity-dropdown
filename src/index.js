@@ -103,16 +103,8 @@ import 'styles/main.scss';
         });
       };
 
-      function addClearEvent () {
-        $menu.trigger('clear');
-      }
-
-      function addClearEventHandler () {
-        $menu.bind('clear', (event) => {
-          const target = event.currentTarget;
-
-          $(target).find('.counter').html('0');
-        });
+      function menuClear () {
+        $menu.find('.counter').html('0');
       }
 
       function setItemSettings (id, $item) {
@@ -225,8 +217,7 @@ import 'styles/main.scss';
               }
             }
 
-            const clearEvent = new CustomEvent('clear', { bubbles: true });
-            event.target.dispatchEvent(clearEvent);
+            menuClear();
 
             event.stopPropagation();
           });
@@ -265,8 +256,7 @@ import 'styles/main.scss';
         setItemSettings(id, $item);
         addControls(id, $item);
       });
-      addClearEvent();
-      addClearEventHandler();
+
       addControlBtns();
       updateDisplay();
     });

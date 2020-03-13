@@ -142,7 +142,7 @@
           let selectionText = '';
           let i = 0;
 
-          if (totalItems == 0) return initialText;
+          if (totalItems == 0) return this.initialText;
           for (let key in itemCount) {
             if (itemCount[key] > 0) {              
               selectionText += itemCount[key] + " " + itemLabels[key] + ", ";
