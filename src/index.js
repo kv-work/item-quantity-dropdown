@@ -71,12 +71,7 @@ import 'styles/main.scss';
 
       const updateDisplay = () => {
         $selection.html(settings.setCustomMessage(itemCount, totalItems, itemLabels));
-        $this.data({
-          items: itemCount,
-          total: totalItems,
-        });
         const $clearBtn = $this.find('button.button-clear');
-
         if (totalItems === 0 && $clearBtn && clearBtnVisible) {
           clearBtnVisible = false;
           $clearBtn.addClass('button-invisible');
@@ -106,6 +101,20 @@ import 'styles/main.scss';
           }
         });
       };
+
+      function setData () {
+        const itemsObj = {};
+        for (const key in itemLabels) {
+          if ({}.hasOwnProperty.call(itemLabels, key)) {
+            itemsObj[key] = itemCount[key];
+          }
+        }
+
+        $this.data({
+          items: itemsObj,
+          total: totalItems,
+        });
+      }
 
       function menuClear () {
         $menu.find('.counter').html('0');
@@ -158,6 +167,7 @@ import 'styles/main.scss';
             itemCount[id] -= 1;
             totalItems -= 1;
             $counter.html(itemCount[id]);
+            setData();
             updateDisplay();
             onChange(id, itemCount[id], totalItems);
           }
@@ -178,6 +188,7 @@ import 'styles/main.scss';
             itemCount[id] += 1;
             totalItems += 1;
             $counter.html(itemCount[id]);
+            setData();
             updateDisplay();
             onChange(id, itemCount[id], totalItems);
           }
@@ -216,6 +227,7 @@ import 'styles/main.scss';
                 onChange(key, itemCount[key], totalItems);
 
                 if (totalItems === 0) {
+                  setData();
                   updateDisplay();
                 }
               }
@@ -262,6 +274,7 @@ import 'styles/main.scss';
       });
 
       addControlBtns();
+      setData();
       updateDisplay();
     });
 
