@@ -124,7 +124,7 @@ $(document).ready(() => {
   },
   items: {},
   //func to generate text to show on the dropdown
-  setCustomMessage (itemCount, totalItems) {},
+  setCustomMessage (itemCount, totalItems, itemLabels) {},
   // fires when an item quantity changes
   onChange: () => {},
   // return false to prevent an item decrement
@@ -132,7 +132,7 @@ $(document).ready(() => {
   // return false to prevent an item increment
   beforeIncrement: (id, itemCount) => {},
   // fires when an items quantity applies
-  onApply: (itemCount, totalItems) => {}
+  onApply: (itemCount, totalItems, itemLabels, $dropdown) => {}
 }
 ```
 
