@@ -49,10 +49,13 @@ import 'styles/main.scss';
       return false;
     },
     beforeIncrement: () => true,
-    onApply: (itemCount, totalItems) => {
+    onApply: (itemCount, totalItems, itemLabels, dropdown) => {
       console.log('==================');
       console.log(`Total Items: ${totalItems} including:`);
       console.log(itemCount);
+      console.log(itemLabels);
+      console.log('Instance:');
+      console.log(dropdown);
       console.log('==================');
     },
   };
@@ -240,13 +243,13 @@ import 'styles/main.scss';
         }
 
         if (settings.controls.applyBtn) {
-          $applyBtn = $(`<button class="button-apply">${settings.controls.applyBtnLabel}</button>`);
+          $applyBtn = $(`<button class="button-apply" type="button">${settings.controls.applyBtnLabel}</button>`);
           $controlsBtn.append($applyBtn);
 
           $applyBtn.click((event) => {
             const { onApply } = settings;
 
-            onApply(itemCount, totalItems);
+            onApply(itemCount, totalItems, itemLabels, $this);
             $this.toggleClass('menu-open');
 
             event.stopPropagation();
